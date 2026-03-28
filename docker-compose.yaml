@@ -3,20 +3,20 @@ services:
     image: samarkinivan/auth-service:latest
     container_name: auth-service
     restart: on-failure
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     environment:
       ASPNETCORE_ENVIRONMENT: Development
       CONNECTIONSTRINGS__DBCONNECTION: "Data Source=auth-service-db,1433;Initial Catalog=AuthDB;User Id=sa;Password=SecretPassword161;TrustServerCertificate=True"
       COMMON__SECRETKEY: "secret_key_88002353535_161"
       CLIENT__BASEURL: "http://147.45.78.164:3000"
-      RMQ__HOSTNAME: "rabbitmq"
+      RMQ__HOSTNAME: "host.docker.internal"
       RMQ__USERNAME: "default_user"
       RMQ__PASSWORD: "default_password"
     ports:
       - "8081:8080"
     depends_on:
       - auth-service-db
-    networks:
-      - app-network
 
   auth-service-db:
     image: mcr.microsoft.com/mssql/server:latest
@@ -29,13 +29,7 @@ services:
       MSSQL_PID: Express
     ports:
       - "1434:1433"
-    networks:
-      - app-network
     volumes:
       - ./.meta/mssql/data:/var/opt/mssql/data
       - ./.meta/mssql/log:/var/opt/mssql/log
       - ./.meta/mssql/secrets:/var/opt/mssql/secrets
-
-networks:
-  app-network:
-    external: true
