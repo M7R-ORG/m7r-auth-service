@@ -15,7 +15,7 @@ public static partial class ServiceManagerExtension
         string? connection = AppEnvironment.GetDBConnectionString(config);
 
         serviceCollection.AddOptions();
-        serviceCollection.AddDbContext<EFContext>(options => options.UseSqlServer(connection));
+        serviceCollection.AddDbContext<EFContext>(options => options.UseNpgsql(connection));
         serviceCollection.AddControllers();
         serviceCollection.AddEndpointsApiExplorer();
         serviceCollection.AddHttpContextAccessor();

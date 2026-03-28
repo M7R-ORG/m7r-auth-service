@@ -7,7 +7,7 @@ services:
       - "host.docker.internal:host-gateway"
     environment:
       ASPNETCORE_ENVIRONMENT: Development
-      CONNECTIONSTRINGS__DBCONNECTION: "Data Source=auth-service-db,1433;Initial Catalog=AuthDB;User Id=sa;Password=SecretPassword161;TrustServerCertificate=True"
+      CONNECTIONSTRINGS__DBCONNECTION: "Host=auth-service-db;Database=AuthDB;Username=postgres;Password=SecretPassword161"
       COMMON__SECRETKEY: "secret_key_88002353535_161"
       CLIENT__BASEURL: "http://147.45.78.164:3000"
       RMQ__HOSTNAME: "host.docker.internal"
@@ -19,17 +19,14 @@ services:
       - auth-service-db
 
   auth-service-db:
-    image: mcr.microsoft.com/mssql/server:latest
+    image: postgres:17
     container_name: auth-service-db
     restart: on-failure
-    user: root
     environment:
-      ACCEPT_EULA: Y
-      MSSQL_SA_PASSWORD: SecretPassword161
-      MSSQL_PID: Express
+      POSTGRES_DB: AuthDB
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: SecretPassword161
     ports:
-      - "1434:1433"
+      - "5432:5432"
     volumes:
-      - ./.meta/mssql/data:/var/opt/mssql/data
-      - ./.meta/mssql/log:/var/opt/mssql/log
-      - ./.meta/mssql/secrets:/var/opt/mssql/secrets
+      - ./.meta/postgres/data:/var/lib/postgresql/data
