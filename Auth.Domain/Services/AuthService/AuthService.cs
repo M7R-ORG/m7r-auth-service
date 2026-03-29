@@ -24,7 +24,7 @@ public class AuthBS : DomainService
     {
         double refreshTokenLifeTime = double.Parse(_appSettings.Auth.RefreshTokenLifeTime);
 
-        DateTime expiryTime = DateTime.Now.AddMinutes(refreshTokenLifeTime);
+        DateTime expiryTime = DateTime.UtcNow.AddMinutes(refreshTokenLifeTime);
 
         var newRefreshToken = new RefreshToken(refreshToken, expiryTime, account.Id);
 

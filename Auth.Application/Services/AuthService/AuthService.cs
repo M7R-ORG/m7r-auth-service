@@ -79,7 +79,7 @@ public class AuthService : BaseService, IAuthService
             await _authBS.GetRefreshTokenAsync(request.RefreshToken)
             ?? throw new InvalidCredentialsException("Invalid refresh token");
 
-        if (refreshToken.ExpiryTime < DateTime.Now)
+        if (refreshToken.ExpiryTime < DateTime.UtcNow)
             throw new OperationNotAllowedException("Expired refresh token");
 
         Account account =
@@ -118,7 +118,7 @@ public class AuthService : BaseService, IAuthService
             {
                 Id = account.Id,
                 Email = request.Email,
-                ExpirationDate = DateTime.Now.AddHours(1),
+                ExpirationDate = DateTime.UtcNow.AddHours(1),
             }
         );
 
@@ -152,7 +152,7 @@ public class AuthService : BaseService, IAuthService
             JsonSerializer.Deserialize<ResetToken>(resetTokenJson)
             ?? throw new IncorrectDataException("Incorrect reset token");
 
-        if (resetToken.ExpirationDate < DateTime.Now)
+        if (resetToken.ExpirationDate < DateTime.UtcNow)
             throw new OperationNotAllowedException("Reset token has expired");
 
         await _accountsIS.UpdatePasswordAsync(resetToken.Id, request.Password);

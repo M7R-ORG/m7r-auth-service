@@ -14,7 +14,7 @@ public static class AuthOptions
         byte[] hashSecretKey = SHA512.HashData(Encoding.UTF8.GetBytes(tokenParams[TokenClaim.SecretKey]));
         var key = new SymmetricSecurityKey(hashSecretKey);
 
-        DateTime expires = DateTime.Now.AddMinutes(double.Parse(tokenParams[TokenClaim.AccessTokenLifeTime]));
+        DateTime expires = DateTime.UtcNow.AddMinutes(double.Parse(tokenParams[TokenClaim.AccessTokenLifeTime]));
 
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha512);
 

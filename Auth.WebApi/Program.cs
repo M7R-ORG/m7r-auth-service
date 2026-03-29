@@ -4,7 +4,6 @@ using Auth.WebApi.ApiBuilder.ServiceManager;
 using Auth.WebApi.Common;
 
 AppEnvironment.LoadEnvironments();
-
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 ConfigurationManager config = builder.Configuration;
 
